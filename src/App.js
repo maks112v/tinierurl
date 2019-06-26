@@ -6,6 +6,7 @@ import { authContext, useAuth, authHandler } from './hooks/Auth';
 
 import Dashboard from './views/Dashboard';
 import Login from './views/Login';
+import ToLink from './views/ToLink';
 
 function App() {
   const { user, initializing } = useAuth();
@@ -22,7 +23,7 @@ function App() {
       <Switch>
         <Route exact path="/login" render={props => <Login {...props} />} />
         <PrivateRoute exact path="/" component={Dashboard} />
-        <Redirect to="/" />
+        <Route path="/:id" render={props => <ToLink {...props} />} />
       </Switch>
     </authContext.Provider>
   );

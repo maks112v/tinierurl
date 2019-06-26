@@ -1,5 +1,11 @@
 import React from 'react';
 
+import AddLink from '../components/AddLink';
+
 export default function Dashboard() {
-  return <div />;
+  return (
+    <>
+      <AddLink />
+    </>
+  );
 }

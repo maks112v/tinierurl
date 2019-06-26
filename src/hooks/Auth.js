@@ -37,20 +37,25 @@ export const useAuth = () => {
 };
 
 export const authHandler = type => {
-  const userCheck = ({ additionalUserInfo, user }) => {
-    console.log(user);
-    if (additionalUserInfo.isNewUser) {
-    }
+  const userCheck = ({ user }) => {
+    store
+      .collection('users')
+      .doc(user.uid)
+      .set({
+        createdAt: user.metadata.creationTime,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        name: user.displayName,
+        photoURL: user.photoURL,
+      });
   };
 
   const guestUser = ({ additionalUserInfo, user }) => {
-    console.log(user);
     if (additionalUserInfo.isNewUser) {
       store
         .collection('guests')
         .doc(user.uid)
-        .set({ createdAt: user.metadata.creationTime })
-        .then(res => console.log(res));
+        .set({ createdAt: user.metadata.creationTime });
     }
   };
 
