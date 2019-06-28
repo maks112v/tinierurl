@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { store } from '../config/firebase';
 import { Layout, Spin, Typography, Icon, Button, Skeleton } from 'antd';
 
+import { Link } from 'react-router-dom';
+
 import metaData from 'url-metadata';
 
 export default function ToLInk({ match: { isExact, params }, ...rest }) {
@@ -167,9 +169,12 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
             icon="link"
             size="large"
             href={state.redirectUrl}
+            style={{ margin: '20px 0' }}
           >
             Open Link
           </Button>
+          <br />
+          <Link to="/">Make A Link</Link>
         </div>
       </Layout.Content>
     </Layout>
