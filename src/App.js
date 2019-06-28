@@ -11,8 +11,8 @@ import ToLink from './views/ToLink';
 
 function App() {
   const { user, initializing } = useAuth();
-  const [delay, setDelay] = useState(false);
-  setTimeout(() => setDelay(false), 3000);
+  const [delay, setDelay] = useState(true);
+  setTimeout(() => setDelay(false), 1000);
   if (initializing || delay) {
     return (
       <Layout style={{ backgroundColor: '#F9FBFD' }}>
