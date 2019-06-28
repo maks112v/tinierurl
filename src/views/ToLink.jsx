@@ -1,13 +1,38 @@
 import React, { useState, useEffect } from 'react';
 
 import { store } from '../config/firebase';
-import { Layout, Menu, Spin, Typography, Icon } from 'antd';
+import { Layout, Spin, Typography, Icon, Button, Skeleton } from 'antd';
 
 import metaData from 'url-metadata';
 
 export default function ToLInk({ match: { isExact, params }, ...rest }) {
-  const [state, setState] = useState({ redirectUrl: '', isLoading: true });
+  const [state, setState] = useState({
+    redirectUrl: '',
+    isLoading: true,
+    metaData: false,
+  });
   const domain = window.location.host;
+
+  function getMeta(url) {
+    metaData(`https://cors-anywhere.herokuapp.com/${url}`).then(
+      function(metadata) {
+        setState({
+          ...state,
+          redirectUrl: url,
+          isLoading: false,
+          metaData: {
+            title: metadata.title,
+            description: metadata.description,
+          },
+        });
+        console.log(metadata);
+      },
+      function(error) {
+        // failure handler
+        console.log(error);
+      },
+    );
+  }
 
   useEffect(() => {
     const unsubscribe = store
@@ -24,10 +49,13 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
             .onSnapshot(snapShot => {
               if (snapShot.exists) {
                 const { url } = snapShot.data();
-                metaData(url).then(res => {
-                  console.log(res);
+                setState({
+                  ...state,
+                  isLoading: false,
+                  redirectUrl: url,
+                  metaData: false,
                 });
-                setState({ isLoading: false, redirectUrl: url });
+                getMeta(url);
                 //window.open(url);
               } else {
                 setState({
@@ -113,21 +141,35 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
           alignItems: 'center',
         }}
       >
-        <div>
+        <div style={{ maxWidth: 600 }}>
           <Icon
             type="smile"
             theme="twoTone"
             twoToneColor="#52c41a"
             style={{ fontSize: 50, marginBottom: 20 }}
           />
-          <Typography.Title style={{ fontWeight: 'bold' }}>
-            <a href={state.redirectUrl}>
-              Open Link <Icon type="link" />
-            </a>
-          </Typography.Title>
-          <Typography.Title level={4} style={{ color: '#757575' }}>
-            {state.redirectUrl}
-          </Typography.Title>
+          <br />
+
+          {state.metaData && (
+            <>
+              <Typography.Title level={1}>
+                {state.metaData.title}
+              </Typography.Title>
+              <Typography.Title level={4} style={{ color: '#757575' }}>
+                {state.metaData.description}
+              </Typography.Title>
+            </>
+          )}
+          <Typography.Text>{state.redirectUrl}</Typography.Text>
+          <br />
+          <Button
+            type="primary"
+            icon="link"
+            size="large"
+            href={state.redirectUrl}
+          >
+            Open Link
+          </Button>
         </div>
       </Layout.Content>
     </Layout>
