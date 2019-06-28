@@ -18,23 +18,22 @@ export default function ShowLinks() {
       .doc(user.uid)
       .collection('redirects')
       .onSnapshot(snapShot => {
-        const shorts = {};
-        snapShot.forEach(doc => {
-          const { path } = doc.data();
+        const items = {};
+        snapShot.forEach(getPath => {
+          const { path } = getPath.data();
           store.doc(path).onSnapshot(doc => {
             const data = doc.data();
-            console.log(data);
-            shorts[doc.id] = data;
+            items[doc.id] = data;
           });
         });
-        setDocs(shorts);
+        setDocs(items);
         setIsLoading(false);
       });
 
     return () => unsubscribe();
   }, []);
 
-  console.log(JSON.stringify(docs));
+  console.log(docs);
 
   return (
     <div style={{ margin: '30px 0', backgroundColor: 'white' }}>
