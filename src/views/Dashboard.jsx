@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import AddLink from '../components/AddLink';
+import ShowLinks from '../components/ShowLinks';
 
 import { PageHeader, Button, Tabs, Tag, Typography, Table } from 'antd';
 
@@ -24,9 +25,9 @@ export default function Dashboard() {
   }
   const [currentTab, setCurrentTab] = useState('1');
   return (
-    <>
+    <div style={{ padding: '1rem' }}>
       <PageHeader
-        onBack={() => window.history.back()}
+        // onBack={() => window.history.back()}
         title={`${greeting()} ${user.displayName}`}
         subTitle="Add and manage links"
         // tags={<Tag color="red">Warning</Tag>}
@@ -85,17 +86,8 @@ export default function Dashboard() {
           </div>
         </div>
       </PageHeader>
-      {currentTab === '1' && (
-        <div style={{ margin: '30px 0', backgroundColor: 'white' }}>
-          <Table
-            pagination={false}
-            columns={[{ title: 'Url', dataIndex: 'url' }, {}]}
-            dataSource={[{ url: 'asdfasdf', key: 1 }]}
-            bordered={true}
-          />
-        </div>
-      )}
+      {currentTab === '1' && <ShowLinks />}
       {currentTab === '2' && <AddLink />}
-    </>
+    </div>
   );
 }

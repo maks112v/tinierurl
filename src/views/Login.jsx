@@ -5,6 +5,8 @@ import { authHandler, authContext } from '../hooks/Auth';
 import { Redirect } from 'react-router-dom';
 import { Button, Typography } from 'antd';
 
+import image from '../assets/pale-waiting.png';
+
 export default function Login(props) {
   return (
     <authContext.Consumer>
@@ -23,6 +25,7 @@ export default function Login(props) {
               }}
             >
               <div>
+                <img src={image} style={{ width: 300 }} />
                 <Typography.Title style={{ fontWeight: 'bold' }}>
                   Tinier
                   <span style={{ color: '#2196F3' }}>Url</span>
