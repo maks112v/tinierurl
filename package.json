@@ -12,7 +12,8 @@
     "react-firebase-hooks": "^2.0.0",
     "react-loading-bar": "0.0.7",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "url-metadata": "^2.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

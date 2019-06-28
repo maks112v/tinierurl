@@ -57,7 +57,7 @@ function App() {
           </Layout.Header>
         )} */}
         <Layout.Content>
-          <div style={{ maxWidth: 1200, margin: '20px auto', padding: '1rem' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <Switch>
               <Route
                 exact
