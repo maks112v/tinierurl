@@ -36,10 +36,21 @@ export default function AddLink() {
         owner: user.uid,
       })
       .then(res => {
-        setLongLink({ value: '', val: '' });
-        setIsLoading(false);
-        copy(`${selectDomains.find(x => x.id === domain).hostname}/${res.id}`);
-        message.success('Link Copied to Clipboard');
+        store
+          .collection('users')
+          .doc(user.uid)
+          .collection('redirects')
+          .add({
+            path: `domains/${domain}/redirects/${res.id}`,
+          })
+          .then(() => {
+            setLongLink({ value: '', val: '' });
+            setIsLoading(false);
+            copy(
+              `${selectDomains.find(x => x.id === domain).hostname}/${res.id}`,
+            );
+            message.success('Link Copied to Clipboard');
+          });
       });
   }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { store } from '../config/firebase';
 
@@ -9,21 +9,42 @@ import { useSession } from '../hooks/Auth';
 export default function ShowLinks() {
   const user = useSession();
 
+  const [docs, setDocs] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    store
-      .collection('domains')
-      .where('owner', '==', user.uid)
+    const unsubscribe = store
+      .collection('users')
+      .doc(user.uid)
+      .collection('redirects')
       .onSnapshot(snapShot => {
-        console.log(snapShot);
+        const shorts = {};
+        snapShot.forEach(doc => {
+          const { path } = doc.data();
+          store.doc(path).onSnapshot(doc => {
+            const data = doc.data();
+            console.log(data);
+            shorts[doc.id] = data;
+          });
+        });
+        setDocs(shorts);
+        setIsLoading(false);
       });
+
+    return () => unsubscribe();
   }, []);
+
+  console.log(JSON.stringify(docs));
+
   return (
     <div style={{ margin: '30px 0', backgroundColor: 'white' }}>
       <Table
         pagination={false}
-        columns={[{ title: 'Url', dataIndex: 'url' }, {}]}
-        dataSource={[{ url: 'asdfasdf', key: 1 }]}
+        loading={isLoading}
+        columns={[{ title: 'Url', dataIndex: 'url', key: 'url' }]}
+        dataSource={Object.values(docs)}
         bordered={true}
+        rowKey="id"
       />
     </div>
   );

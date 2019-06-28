@@ -143,7 +143,7 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
           alignItems: 'center',
         }}
       >
-        <div style={{ maxWidth: 600 }}>
+        <div style={{ maxWidth: 600, padding: '1rem' }}>
           <Icon
             type="smile"
             theme="twoTone"
@@ -154,7 +154,7 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
 
           {state.metaData && (
             <>
-              <Typography.Title level={1}>
+              <Typography.Title level={2}>
                 {state.metaData.title}
               </Typography.Title>
               <Typography.Title level={4} style={{ color: '#757575' }}>

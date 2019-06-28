@@ -3,7 +3,16 @@ import React, { useState } from 'react';
 import AddLink from '../components/AddLink';
 import ShowLinks from '../components/ShowLinks';
 
-import { PageHeader, Button, Tabs, Tag, Typography, Table } from 'antd';
+import {
+  PageHeader,
+  Button,
+  Tabs,
+  Tag,
+  Typography,
+  Table,
+  Row,
+  Col,
+} from 'antd';
 
 import { useSession, authHandler } from '../hooks/Auth';
 
@@ -30,7 +39,6 @@ export default function Dashboard() {
         // onBack={() => window.history.back()}
         title={`${greeting()} ${user.displayName}`}
         subTitle="Add and manage links"
-        // tags={<Tag color="red">Warning</Tag>}
         extra={[
           <Button key="logout" onClick={authHandler}>
             Logout
@@ -43,7 +51,42 @@ export default function Dashboard() {
           </Tabs>
         }
       >
-        <div
+        <Row type="flex" style={{ textAlign: 'center' }}>
+          <Col sm={24} md={8}>
+            <img src={image1} alt="" style={{ width: '100%' }} />
+            <Typography.Title level={4}>
+              Own + amplify your brand
+            </Typography.Title>
+            <Typography.Paragraph>
+              Drive engagement across every device and channel. Using Tinier,
+              you can create custom, recognizable call-to-action links that
+              drive brand equity.
+            </Typography.Paragraph>
+          </Col>
+          <Col sm={24} md={8}>
+            <img src={image2} alt="" style={{ width: '100%' }} />
+            <Typography.Title level={4}>
+              Analyze + optimize your campaigns
+            </Typography.Title>
+            <Typography.Paragraph>
+              Turn your prospects into buyers. With Tinier, you’ll have access
+              to strong data and analytics tools so you can measure your
+              cross-channel performance in real-time.
+            </Typography.Paragraph>
+          </Col>
+          <Col sm={24} md={8}>
+            <img src={image3} alt="" style={{ width: '100%' }} />
+            <Typography.Title level={4}>
+              Connect + inspire your customers
+            </Typography.Title>
+            <Typography.Paragraph>
+              Engage your audience on the right channels at the right time.
+              Tinier helps you build stronger relationships with the people that
+              matter most.
+            </Typography.Paragraph>
+          </Col>
+        </Row>
+        {/* <div
           className="wrap"
           style={{
             display: 'flex',
@@ -84,7 +127,7 @@ export default function Dashboard() {
               matter most.
             </Typography.Paragraph>
           </div>
-        </div>
+        </div> */}
       </PageHeader>
       {currentTab === '1' && <ShowLinks />}
       {currentTab === '2' && <AddLink />}
