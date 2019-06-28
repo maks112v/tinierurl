@@ -99,6 +99,8 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
             <Typography.Title level={4} style={{ color: '#757575' }}>
               Please try another link.
             </Typography.Title>
+            <br />
+            <Link to="/">Make A Link</Link>
           </div>
         </Layout.Content>
       </Layout>

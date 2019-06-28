@@ -45,7 +45,7 @@ export default function Login(props) {
                 >
                   Google
                 </Button>
-                <Button
+                {/* <Button
                   type="primary"
                   shape="round"
                   icon="user"
@@ -55,7 +55,7 @@ export default function Login(props) {
                   style={{ margin: 10 }}
                 >
                   Guest
-                </Button>
+                </Button> */}
               </div>
             </div>
           );
