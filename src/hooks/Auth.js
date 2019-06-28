@@ -9,8 +9,8 @@ export const authContext = createContext({
 });
 
 export const useSession = () => {
-  const { user } = useContext(authContext);
-  return user;
+  const session = useContext(authContext);
+  return session;
 };
 
 export const useAuth = () => {
