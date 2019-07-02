@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { store } from '../config/firebase';
 
-import { Table, Divider, message } from 'antd';
+import { Table, Divider, message, Popconfirm } from 'antd';
 
 import { useSession } from '../hooks/Auth';
 
@@ -19,10 +19,16 @@ export default function ShowLinks() {
     message.success('Link Copied to Clipboard');
   }
 
+  function deleteUrl(path) {
+    console.log(path);
+    store.doc(path).update({ active: false });
+  }
+
   useEffect(() => {
     const unsubscribe = store
       .collectionGroup('redirects')
       .where('owner', '==', user.uid)
+      .where('active', '==', true)
       .onSnapshot(snapshot => {
         let items = [];
         // console.log(snapshot);
@@ -67,7 +73,14 @@ export default function ShowLinks() {
                 Copy Url
               </a>
               <Divider type="vertical" />
-              <a href="javascript:;">Delete</a>
+              <Popconfirm
+                title="Delete Url"
+                onConfirm={() => deleteUrl(record.path)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <a href="javascript:;">Delete</a>
+              </Popconfirm>
             </span>
           )}
         />

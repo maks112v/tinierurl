@@ -18,10 +18,6 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
   });
   const domain = window.location.host;
 
-  const updateStats = () => {
-    console.log('added');
-  };
-
   function getMeta(url) {
     metaData(`https://cors-anywhere.herokuapp.com/${url}`).then(
       function(metadata) {
@@ -56,8 +52,8 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
             .collection('redirects')
             .doc(params.id)
             .onSnapshot(snapShot => {
-              if (snapShot.exists) {
-                const { url, views } = snapShot.data();
+              const { url, views, active } = snapShot.data();
+              if (snapShot.exists && active) {
                 getMeta(url);
                 setState({
                   ...state,
