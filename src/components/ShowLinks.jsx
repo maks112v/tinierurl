@@ -45,8 +45,6 @@ export default function ShowLinks() {
     return () => unsubscribe();
   }, []);
 
-  console.log(docs);
-
   return (
     <div style={{ margin: '30px 0', backgroundColor: 'white' }}>
       <Table
@@ -57,6 +55,9 @@ export default function ShowLinks() {
         rowKey="id"
       >
         <Table.Column title="Url" dataIndex="url" />
+        <Table.Column title="Views" dataIndex="views" />
+        <Table.Column title="Domain" dataIndex="hostname" />
+        <Table.Column title="Short Link" dataIndex="shortLink" />
         <Table.Column
           title="Action"
           key="action"

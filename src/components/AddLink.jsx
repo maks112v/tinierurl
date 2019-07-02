@@ -36,6 +36,10 @@ export default function AddLink() {
         url: longLink.value,
         owner: user.uid,
         hostname: hostName,
+        stats: {
+          unique: 0,
+          total: 0,
+        },
       })
       .then(res => {
         setLongLink({ value: '', val: '' });

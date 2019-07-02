@@ -10,10 +10,17 @@ import metaData from 'url-metadata';
 export default function ToLInk({ match: { isExact, params }, ...rest }) {
   const [state, setState] = useState({
     redirectUrl: '',
+    linkId: '',
     isLoading: true,
     metaData: false,
+    path: '',
+    error: false,
   });
   const domain = window.location.host;
+
+  const updateStats = () => {
+    console.log('added');
+  };
 
   function getMeta(url) {
     metaData(`https://cors-anywhere.herokuapp.com/${url}`).then(
@@ -50,14 +57,19 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
             .doc(params.id)
             .onSnapshot(snapShot => {
               if (snapShot.exists) {
-                const { url } = snapShot.data();
+                const { url, views } = snapShot.data();
+                getMeta(url);
                 setState({
                   ...state,
                   isLoading: false,
                   redirectUrl: url,
+                  linkId: snapShot.id,
+                  path: snapShot.ref.path,
+                  views: views,
+                  error: false,
                   metaData: false,
                 });
-                getMeta(url);
+
                 //window.open(url);
               } else {
                 setState({
@@ -72,6 +84,13 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
 
     return () => unsubscribe();
   }, []);
+
+  // Making sure stats only get updated once per reload
+  useEffect(() => {
+    if (!state.error && !state.isLoading) {
+      store.doc(state.path).update({ views: state.views + 1 });
+    }
+  }, [state.error, state.isLoading]);
 
   if (state.error) {
     return (
@@ -134,6 +153,7 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
       </Layout>
     );
   }
+
   return (
     <Layout style={{ backgroundColor: '#F9FBFD' }}>
       <Layout.Content
