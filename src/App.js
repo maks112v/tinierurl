@@ -65,7 +65,10 @@ function App() {
                 render={props => <Login {...props} />}
               />
               <PrivateRoute exact path="/" component={Dashboard} />
-              <Route path="/:id" render={props => <ToLink {...props} />} />
+              <Route
+                path="/:id/:options?"
+                render={props => <ToLink {...props} />}
+              />
             </Switch>
           </div>
         </Layout.Content>

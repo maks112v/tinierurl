@@ -30,7 +30,6 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
             description: metadata.description,
           },
         });
-        console.log(metadata);
       },
       function(error) {
         // failure handler
@@ -65,8 +64,9 @@ export default function ToLInk({ match: { isExact, params }, ...rest }) {
                   error: false,
                   metaData: false,
                 });
-
-                //window.open(url);
+                if (params.options === 'd' && !document.hidden) {
+                  window.open(url);
+                }
               } else {
                 setState({
                   isLoading: false,

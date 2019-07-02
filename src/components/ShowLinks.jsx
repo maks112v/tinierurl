@@ -62,7 +62,7 @@ export default function ShowLinks() {
       >
         <Table.Column title="Url" dataIndex="url" />
         <Table.Column title="Views" dataIndex="views" />
-        <Table.Column title="Domain" dataIndex="hostname" />
+        {/* <Table.Column title="Domain" dataIndex="hostname" /> */}
         <Table.Column title="Short Link" dataIndex="shortLink" />
         <Table.Column
           title="Action"
