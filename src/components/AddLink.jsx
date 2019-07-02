@@ -27,6 +27,7 @@ export default function AddLink() {
   function submitHandler(e) {
     e.preventDefault();
     setIsLoading(true);
+    const hostName = selectDomains.find(x => x.id === domain).hostname;
     store
       .collection('domains')
       .doc(domain)
@@ -34,23 +35,13 @@ export default function AddLink() {
       .add({
         url: longLink.value,
         owner: user.uid,
+        hostname: hostName,
       })
       .then(res => {
-        store
-          .collection('users')
-          .doc(user.uid)
-          .collection('redirects')
-          .add({
-            path: `domains/${domain}/redirects/${res.id}`,
-          })
-          .then(() => {
-            setLongLink({ value: '', val: '' });
-            setIsLoading(false);
-            copy(
-              `${selectDomains.find(x => x.id === domain).hostname}/${res.id}`,
-            );
-            message.success('Link Copied to Clipboard');
-          });
+        setLongLink({ value: '', val: '' });
+        setIsLoading(false);
+        copy(`${hostName}/${res.id}`);
+        message.success('Link Copied to Clipboard');
       });
   }
 

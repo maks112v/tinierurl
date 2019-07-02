@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import { store } from '../config/firebase';
 
-import { Table } from 'antd';
+import { Table, Divider, message } from 'antd';
 
 import { useSession } from '../hooks/Auth';
+
+import copy from 'copy-to-clipboard';
 
 export default function ShowLinks() {
   const user = useSession();
@@ -12,37 +14,63 @@ export default function ShowLinks() {
   const [docs, setDocs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  function copyUrl(url) {
+    copy(url);
+    message.success('Link Copied to Clipboard');
+  }
+
   useEffect(() => {
-    let items = [];
     const unsubscribe = store
-      .collection('users')
-      .doc(user.uid)
-      .collection('redirects')
-      .onSnapshot(snapShot => {
-        snapShot.forEach(getPath => {
-          const { path } = getPath.data();
-          store.doc(path).onSnapshot(doc => {
-            const data = doc.data();
-            items.push({ ...data });
+      .collectionGroup('redirects')
+      .where('owner', '==', user.uid)
+      .onSnapshot(snapshot => {
+        let items = [];
+        // console.log(snapshot);
+        snapshot.forEach(async doc => {
+          // console.log(doc);
+          // const data = await store.doc(doc.ref.parent.parent.path).get();
+          // console.log(data.data());
+          const data = doc.data();
+          items.push({
+            id: doc.id,
+            path: doc.ref.path,
+            shortLink: `${data.hostname}/${doc.id}`,
+            ...data,
           });
         });
+        setDocs(items);
+        setIsLoading(false);
       });
-    setDocs(items);
-    setIsLoading(false);
+
     return () => unsubscribe();
   }, []);
 
   console.log(docs);
+
   return (
     <div style={{ margin: '30px 0', backgroundColor: 'white' }}>
       <Table
         pagination={false}
         loading={isLoading}
-        columns={[{ title: 'Url', dataIndex: 'url', key: 'url' }]}
         dataSource={docs}
         bordered={true}
         rowKey="id"
-      />
+      >
+        <Table.Column title="Url" dataIndex="url" />
+        <Table.Column
+          title="Action"
+          key="action"
+          render={(text, record) => (
+            <span>
+              <a href="javascript:;" onClick={() => copyUrl(record.shortLink)}>
+                Copy Url
+              </a>
+              <Divider type="vertical" />
+              <a href="javascript:;">Delete</a>
+            </span>
+          )}
+        />
+      </Table>
     </div>
   );
 }

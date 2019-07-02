@@ -27,9 +27,8 @@ export const useAuth = () => {
   }
 
   useEffect(() => {
-    // listen for auth state changes
     const unsubscribe = firebase.auth().onAuthStateChanged(onChange);
-    // unsubscribe to the listener when unmounting
+
     return () => unsubscribe();
   }, []);
 
