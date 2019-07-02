@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { store } from '../config/firebase';
 
-import { Table, Divider, message, Popconfirm } from 'antd';
+import { Table, Divider, message, Popconfirm, Popover } from 'antd';
 
 import { useSession } from '../hooks/Auth';
 
@@ -17,6 +17,14 @@ export default function ShowLinks() {
   function copyUrl(url) {
     copy(url);
     message.success('Link Copied to Clipboard');
+  }
+
+  function extractHostname(url) {
+    let hostname;
+    hostname = url.indexOf('//') > -1 ? url.split('/')[2] : url.split('/')[0];
+    hostname = hostname.split(':')[0];
+    hostname = hostname.split('?')[0];
+    return hostname;
   }
 
   function deleteUrl(path) {
@@ -41,6 +49,7 @@ export default function ShowLinks() {
             id: doc.id,
             path: doc.ref.path,
             shortLink: `${data.hostname}/${doc.id}`,
+            urlHostname: extractHostname(data.url),
             ...data,
           });
         });
@@ -57,10 +66,14 @@ export default function ShowLinks() {
         pagination={false}
         loading={isLoading}
         dataSource={docs}
+        scroll={{ x: true }}
+        expandedRowRender={record => (
+          <p style={{ margin: 0 }}>Full Url: {record.url}</p>
+        )}
         bordered={true}
         rowKey="id"
       >
-        <Table.Column title="Url" dataIndex="url" />
+        <Table.Column title="Url" dataIndex="urlHostname" />
         <Table.Column title="Views" dataIndex="views" />
         {/* <Table.Column title="Domain" dataIndex="hostname" /> */}
         <Table.Column title="Short Link" dataIndex="shortLink" />
